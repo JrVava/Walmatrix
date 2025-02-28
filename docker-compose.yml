@@ -1,0 +1,27 @@
+version: '3'
+services:
+  web:
+    build: .
+    image: walmetrics
+    restart: always
+    ports:
+      - "3000:3000" # Map container port to host port
+      - "4567:4567"
+    networks:
+      - walmetrics_network
+    depends_on:
+      - redis
+    command: npm start
+  redis:
+    image: redis:latest
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379" # Map container port to host port for Redis
+    networks:
+      - walmetrics_network
+networks:
+  walmetrics_network:
+    ipam:
+      driver: default
